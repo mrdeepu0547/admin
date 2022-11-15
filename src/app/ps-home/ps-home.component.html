@@ -1,5 +1,13 @@
-<div class="form-group">
-  <table class="table">
+<nav class="navbar navbar-expand-sm navbar-dark  navbar-fixed-top">
+  <div>
+    <div class="d-inline p-2">People served Table</div>
+  </div>
+  <div class="d-flex ms-auto order-5">
+<button type="button" class="btn btn-info"(click)="onClickedMe()">Click here to view table</button>
+<button type="button" class="btn btn-danger"(click)="onClose()">Click here to close table</button>
+</div>
+</nav>
+  <table class="table" *ngIf="viewtable">
     <thead>
       <tr>
         <th></th>
@@ -27,53 +35,159 @@
       </tr>
     </tbody>
   </table>
-</div>
-<button type="button" class="btn btn-primary" (click)="onClick()">create</button>
-<button type="button" class="btn btn-secondary" (click)="onClick()">submit</button>
+
 <!-- <button type="button" class="btn btn-primary">Create</button> -->
 <br><br>
-<form class="row m-0" (ngSubmit)="onSubmit()" #f="ngForm" *ngIf="true">
+<form class="row m-0" (ngSubmit)="onSubmit()" [formGroup]="personForm" *ngIf="show">
   <div class="col-md-4 col-12">
     <div class="form-group">
-      <label>PS Name</label>
-      <input type="text" class="form-control" id="psName" ngModel name="psName">
+      <label>Last Name</label>
+      <input type="text" class="form-control" id="lastName" formControlName="lastName" required>
     </div>
   </div>
   <div class="col-md-4 col-12">
     <div class="form-group">
-      <label>Home Site</label>
-      <input type="text" class="form-control" id="homeSite" ngModel name="homeSite">
+      <label>First Name</label>
+      <input type="text" class="form-control" id="firstName" formControlName="firstName" required>
     </div>
   </div>
   <div class="col-md-4 col-12">
     <div class="form-group">
-      <label>MRN</label>
-      <input type="number" class="form-control" id="mrn" ngModel name="mrn">
+      <label>Gender</label>
+      <select class="form-control" id="gender" formControlName="gender" required>
+        <option value="male" selected>Male</option>
+        <option value="female">Female</option>
+      </select>
     </div>
   </div>
   <div class="col-md-4 col-12">
     <div class="form-group">
-      <label>City</label>
-      <input type="text" class="form-control" id="city" ngModel name="city">
+      <label>Salutation</label>
+      <input type="text" class="form-control" id="salutation" formControlName="salutation" required>
     </div>
   </div>
   <div class="col-md-4 col-12">
     <div class="form-group">
-      <label>State</label>
-      <input type="text" class="form-control" id="state" ngModel name="state">
+      <label>Marital Status</label>
+      <select class="form-control" id="maritalStatus" formControlName="maritalStatus" required>
+        <option value="single" selected>Single</option>
+        <option value="married">Married</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>Date Of Birth</label>
+      <input type="date" class="form-control" id="dateOfBirth" formControlName="dateOfBirth" required>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>Race</label>
+      <input type="text" class="form-control" id="race" formControlName="race" required>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>SSN</label>
+      <input type="text" class="form-control" id="ssn" formControlName="ssn">
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>Primary Language</label>
+      <select class="form-control" id="primaryLanguage" formControlName="primaryLanguage" required>
+        <option value="english">English</option>
+        <option value="hindi">Hindi</option>
+        <option value="telugu">Telugu</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>Location</label>
+      <input type="text" class="form-control" id="location" formControlName="location" required>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>Address Line #1</label>
+      <input type="text" class="form-control" id="addressLine1" formControlName="addressLine1" required>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>Address Line #2</label>
+      <input type="text" class="form-control" id="addressLine2" formControlName="addressLine2">
     </div>
   </div>
   <div class="col-md-4 col-12">
     <div class="form-group">
       <label>Zip Code</label>
-      <input type="number" class="form-control" id="zipCode" ngModel name="zipCode">
+      <input type="number" class="form-control" id="zipCode" formControlName="zipCode" required>
     </div>
   </div>
   <div class="col-md-4 col-12">
     <div class="form-group">
       <label>Phone</label>
-      <input type="number" class="form-control" id="phone" ngModel name="phone">
+      <input type="number" class="form-control" id="phone" formControlName="phone" required>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
   </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>City</label>
+      <select type="text" class="form-control" id="city" formControlName="city" required>
+        <option value="hyderabad">Hyderabad</option>
+        <option value="vijayawada">Vijayawada</option>
+        <option value="chennai">Chennai</option>
+        <option value="bangalore">Bangalore</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>State</label>
+      <select class="form-control" id="state" formControlName="state" required>
+        <option value="ts">Telangana</option>
+        <option value="ap">Andhra Pradesh</option>
+        <option value="tn">TamilNadu</option>
+        <option value="ka">Karnataka</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>Time Zone</label>
+      <select class="form-control" id="timeZone" formControlName="timeZone" required>
+        <option value="indian">Indian</option>
+        <option value="europe">Europe</option>
+        <option value="atlantic">Atlantic</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="form-group">
+      <label>Country</label>
+      <select class="form-control" id="country" formControlName="country" required>
+        <option value="in">India</option>
+        <option value="us">United States</option>
+        <option value="eu">Europe</option>
+        <option value="uk">United Kingdom</option>
+      </select>
+    </div>
+  </div>
+  <nav class="navbar navbar-expand-sm navbar-dark  navbar-fixed-top">
+    <div><button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button></div>
+    <div class="d-flex ms-auto order-5">
+      <div><button type="submit" class="btn btn-success">Save</button></div>
+  </div>
+  </nav>
 </form>
+<nav class="navbar navbar-expand-sm navbar-dark  navbar-fixed-bottom">
+  <button type="button" class="btn btn-primary" (click)="onClicked()">Create</button>
+  <button type="button" class="btn btn-secondary">Edit</button>
+  <div class="d-flex ms-auto order-5">
+  <button class="btn btn-light" type="button">Previeous</button>
+  <button class="btn btn-dark" type="button">Next</button>
+  </div>
+</nav>
