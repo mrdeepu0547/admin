@@ -1,0 +1,25 @@
+[
+  {"PSName": "MARK",
+  "homeSite": "BLUERIDGE",
+  "mrn": 44700,
+  "city": "NEW YORK",
+  "state": "US",
+  "zipCode": 25001,
+  "phone": 8820457031},
+
+  {"PSName": "ELYSE",
+  "homeSite": "MACON",
+  "mrn": 53107,
+  "city": "VALDOSTA",
+  "state": "GA",
+  "zipCode": 31602,
+  "phone": 4475120086},
+
+  {"PSName": "ABATELLO",
+  "homeSite": "ROANOKE",
+  "mrn": 10473,
+  "city": "HOUSTON",
+  "state": "MI",
+  "zipCode": 48301,
+  "phone": 9974412200}
+]
