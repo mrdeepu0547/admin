@@ -7,12 +7,13 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-    </div class="d-flex ms-auto order-5"
+      <div class="d-flex ms-auto order-5">
           <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search">
+      </div>
     </div>
     </div>
     </div>
-  </nav>
+</nav>
   <nav class="navbar navbar-expand-sm navbar-dark  navbar-fixed-top">
     <div>
       <div class="d-inline p-2">People served Table</div>
@@ -52,7 +53,6 @@
     </tr>
   </tbody>
 </table>
-</div>
 <br><br>
 <div class="container p-5">
   <form class="row m-0" (ngSubmit)="onSubmit()" [formGroup]="personForm" *ngIf="show">
@@ -279,4 +279,4 @@
     <button class="btn btn-light" type="button" [disabled]="lowerBound<=19" (click)="onPrevieous()">Previeous</button>
     <button class="btn btn-dark" type="button" (click)="onNext()">Next</button>
   </div>
-</nav><nav></nav>
+</nav>
