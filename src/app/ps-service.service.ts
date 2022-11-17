@@ -19,7 +19,7 @@ export class PsServiceService {
   return this.http.get(this.baseUrl+'/psapi/getPSList?jsonObj='+jsonObj);
   }
   addPersons(post){
-    return this.http.post(this.postUrl,JSON.stringify(post)).subscribe(result=>{
+    return this.http.post(this.baseUrl+'/psapi/savePSDetails',post).subscribe(result=>{
       console.log(result);
     })
   }

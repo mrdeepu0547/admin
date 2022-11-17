@@ -1,8 +1,7 @@
-
 import { HttpClient } from '@angular/common/http';
-import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { Form, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import {  FormControl, FormGroup, NgControlStatus, Validators } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { PsServiceService } from '../ps-service.service';
 @Component({
   selector: 'app-ps-home',
@@ -17,8 +16,10 @@ export class PsHomeComponent implements OnInit {
   public psList = [];
   show:boolean=false;
   public searchText = '';
-  public viewtable = false
-
+  public viewtable = false;
+  editForm=false;
+  editFormId=0;
+  editData:any=[];
   personForm = new FormGroup({
     psId:new FormControl(0),
     lastName: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -68,7 +69,7 @@ public data={
   "updatedUserId": 1, //hard code,
   // "isEdit":false
 }
-  constructor(private psService:PsServiceService,private http:HttpClient) { }
+  constructor(private psService:PsServiceService,private http:HttpClient,private route:RouterModule) { }
   ngOnInit() {
 
     this. getAllLookupsData();
@@ -78,7 +79,6 @@ public data={
     this.show=false;
   }
   getAllPersons() {
-
     let jsonObj={"userId":1,
     "lowerBound":this.lowerBound,
     "upperBound":this.upperBound,
@@ -146,11 +146,36 @@ public data={
     console.log(data);
     console.log(data.PSId);
     console.log(this.personForm);
-    this.show=true;
-    // this.personForm.setValue({
+    this.editForm=true;
+    this.http.get('http://poc.aquilasoftware.com/poclite/psapi/getPSDetails?jsonObj=%7B%22psId%22:'+this.editFormId+'%7D').subscribe(
+      result =>{
+        this.editData = result;
+        console.log(result);
+    })
+    this.personForm.setValue({
 
-    // })
+      firstName:this.editData.firstName,
+      psId: data.PSId,
+      gender:this.editData.gender,
+      salutation:this.editData.salutation,
+      maritialStatus:this.editData.maritialStatus,
+      dateOfBirth:this.editData.dob,
+      race:this.editData.race,
+      ssn:this.editData.ssn,
+      language:this.editData.language,
+      addressType:this.editData.addressType,
+      addressLine1:this.editData.addressLine1,
+      addressLine2: '',
+      zipCode:this.editData.zipCode,
+      phoneType:this.editData.phoneType,
+      phone:data.phone,
+      city:data.city,
+      state:data.state,
+      timeZone: '',
+      country:this.editData.country
+    })
   }
+
   onClickedMe(){
     this.viewtable=true;
     this.getAllPersons();
@@ -168,12 +193,19 @@ public data={
       this.http.delete('http://poc.aquilasoftware.com/poclite.json').subscribe();
      }
     onSubmit() {
+      if(this.personForm.valid){
+        if(this.editForm==true){
+          console.log(this.data)
+            this.http.post('http://poc.aquilasoftware.com/poclite/psapi/savePSDetails/'+this.editFormId+'.json',this.data).subscribe((result)=> {
+              console.log(result);})
+        }else{
       this.setValue();
-      this.http.post('https://angular-demo-9d196-default-rtdb.firebaseio.com/posts.json',this.data).subscribe((result)=> {
-        console.log(result);
-      })
+      this.http.post('http://poc.aquilasoftware.com/poclite/psapi/savePSDetails',this.data).subscribe((result)=> {
+        console.log(result);})
       console.log(this.data);
       this.personForm.reset();
+      }
+    }
     }
     // form getters
     get lastName(){
@@ -250,5 +282,9 @@ public data={
 
      get country(){
       return this.personForm.get('country');
+     }
+
+     public dummyParam(number,string){
+
      }
 }
