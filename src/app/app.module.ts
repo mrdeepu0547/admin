@@ -6,10 +6,14 @@ import { AppComponent } from './app.component';
 import {HttpClientModule} from '@angular/common/http';
 import { PsHomeComponent } from './ps-home/ps-home.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { EditComponent } from './edit/edit.component';
+import { FilterPipe } from './filter.pipe';
 @NgModule({
   declarations: [
     AppComponent,
-    PsHomeComponent
+    PsHomeComponent,
+    EditComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
