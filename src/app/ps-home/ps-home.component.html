@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-primary navbar-fixed-top">
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary sticky -top">
     <div class="container-fluid">
     <div class="collapse navbar-collapse " id="navbarSupportedContent">
       <div class="mx-auto">
@@ -6,9 +6,6 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      </div>
-      <div class="d-flex ms-auto order-5">
-          <input class="form-control me-2" type="search" placeholder="Search"  aria-label="Search">
       </div>
     </div>
     </div>
@@ -22,6 +19,7 @@
       <button type="button" class="btn btn-danger" (click)="onClose()">Click here to close table</button>
     </div>
   </nav>
+   <p>Form value: {{ form.value | json }}</p>
   <table class="table" *ngIf="viewtable">
   <thead>
     <tr>
@@ -54,13 +52,20 @@
   </tbody>
 </table>
 <br><br>
-<div class="container p-5">
-  <form class="row m-0" (ngSubmit)="onSubmit()" [formGroup]="personForm" *ngIf="show">
+<div class="container" *ngIf="show">
+  <form class="row m-0" (ngSubmit)="onSubmit()" [formGroup]="personForm">
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="lastName">Last Name</label>
-        <input type="text" class="form-control" id="lastName" formControlName="lastName" required>
-        <span *ngIf="lastName && lastName.invalid && lastName.touched" style="color: red;">
+        <input
+          type="text"
+          class="form-control"
+          id="lastName"
+          formControlName="lastName"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.lastName.errors}" required>
+        <span
+          *ngIf="personForm.controls.lastName && personForm.controls.lastName.invalid && personForm.controls.lastName.touched
+                || submitted && personForm.controls.lastName.errors" style="color: red;">
           <p style="font-size: 13px;">Please enter a valid Input</p>
         </span>
       </div>
@@ -68,8 +73,15 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="firstName">First Name</label>
-        <input type="text" class="form-control" id="firstName" formControlName="firstName" required>
-        <span *ngIf="firstName && firstName.invalid && firstName.touched" style="color: red;">
+        <input
+          type="text"
+          class="form-control"
+          id="firstName"
+          formControlName="firstName"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.firstName.errors}" required>
+        <span
+          *ngIf="personForm.controls.firstName && personForm.controls.firstName.invalid && personForm.controls.firstName.touched
+                || submitted && personForm.controls.firstName.errors" style="color: red;">
           <p style="font-size: 13px;">Please enter an valid Input</p>
         </span>
       </div>
@@ -77,11 +89,17 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="gender">Gender</label>
-        <select class="form-control" id="gender" formControlName="gender" required>
+        <select
+          class="form-control"
+          id="gender"
+          formControlName="gender"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.gender.errors}" required>
           <option>--select--</option>
           <option *ngFor="let item of lookUpsData?.gender"[value]="item.id">{{item.name}}</option>
         </select>
-        <span *ngIf="gender && gender.invalid && gender.touched" style="color: red;">
+        <span
+          *ngIf="personForm.controls.gender && personForm.controls.gender.invalid && personForm.controls.gender.touched
+                || submitted && personForm.controls.gender.errors" style="color: red;">
           <p style="font-size: 13px;">Please select an valid Input</p>
         </span>
       </div>
@@ -89,11 +107,17 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="salutation">Salutation</label>
-        <select class="form-control" id="salutation" formControlName="salutation"  required>
+        <select
+          class="form-control"
+          id="salutation"
+          formControlName="salutation"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.salutation.errors}" required>
           <option>--select--</option>
           <option *ngFor="let item of lookUpsData?.salutation"[value]="item.id">{{item.name}}</option>
         </select>
-        <span *ngIf="salutation && salutation.invalid && salutation.touched" style="color: red;">
+        <span
+          *ngIf="personForm.controls.salutation && personForm.controls.salutation.invalid && personForm.controls.salutation.touched
+                || submitted && personForm.controls.salutation.errors" style="color: red;">
           <p style="font-size: 13px;">Please select an valid Input</p>
         </span>
       </div>
@@ -101,11 +125,17 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="maritialStatus">Marital Status</label>
-        <select class="form-control" id="maritialStatus" formControlName="maritialStatus" required>
+        <select
+          class="form-control"
+          id="maritialStatus"
+          formControlName="maritialStatus"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.maritialStatus.errors}" required>
           <option>--select--</option>
           <option *ngFor="let item of lookUpsData?.maritialStatus"[value]="item.id">{{item.name}}</option>
         </select>
-        <span *ngIf="maritialStatus && maritialStatus.invalid && maritialStatus.touched" style="color: red;">
+        <span
+          *ngIf="personForm.controls.maritialStatus && personForm.controls.maritialStatus.invalid && personForm.controls.maritialStatus.touched
+                || submitted && personForm.controls.maritialStatus.errors" style="color: red;">
           <p style="font-size: 13px;">Please select an valid Input</p>
         </span>
       </div>
@@ -113,20 +143,33 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="dateOfBirth">Date Of Birth</label>
-        <input type="date" class="form-control" id="dateOfBirth" formControlName="dateOfBirth" required>
-        <span *ngIf="dateOfBirth && dateOfBirth.invalid && dateOfBirth.touched" style="color: red;">
-          <p style="font-size: 13px;">Please select a valid Date of Birth</p>
+        <input
+          type="date"
+          class="form-control"
+          id="dateOfBirth"
+          formControlName="dateOfBirth"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.dateOfBirth.errors}" required>
+        <span
+          *ngIf="personForm.controls.dateOfBirth && personForm.controls.dateOfBirth.invalid && personForm.controls.dateOfBirth.touched
+                || submitted && personForm.controls.dateOfBirth.errors" style="color: red;">
+          <p style="font-size: 13px;">Please select a valid Input</p>
         </span>
       </div>
     </div>
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="race">Race</label>&nbsp;
-        <select class="form-control" id="race" formControlName="race" required>
+        <select
+          class="form-control"
+          id="race"
+          formControlName="race"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.race.errors}" required>
           <option>--select--</option>
           <option *ngFor="let item of lookUpsData?.race"[value]="item.id">{{item.name}}</option>
         </select>
-        <span *ngIf="race && race.invalid && race.touched" style="color: red;">
+        <span
+          *ngIf="personForm.controls.race && personForm.controls.race.invalid && personForm.controls.race.touched
+                || submitted && personForm.controls.race.errors" style="color: red;">
           <p style="font-size: 13px;">Please select an valid Input</p>
         </span>
       </div>
@@ -134,20 +177,33 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="ssn">SSN</label>
-        <input type="text" class="form-control" id="ssn" formControlName="ssn">
-        <span *ngIf="ssn && ssn.invalid && ssn.touched" style="color: red;">
-          <p style="font-size: 13px;">Please enter a valid SSN</p>
+        <input
+          type="text"
+          class="form-control"
+          id="ssn"
+          formControlName="ssn"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.ssn.errors}" required>
+        <span
+          *ngIf="personForm.controls.ssn && personForm.controls.ssn.invalid && personForm.controls.ssn.touched
+                || submitted && personForm.controls.ssn.errors" style="color: red;">
+          <p style="font-size: 13px;">Please enter a valid Input</p>
         </span>
       </div>
     </div>
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="language">Primary Language</label>&nbsp;
-        <select class="form-control" id="language" formControlName="language" required>
+        <select
+          class="form-control"
+          id="language"
+          formControlName="language"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.language.errors}" required>
           <option>--select--</option>
           <option *ngFor="let item of lookUpsData?.language"[value]="item.sortOrder">{{item.name}}</option>
         </select>
-        <span *ngIf="language && language.invalid && language.touched" style="color: red;">
+        <span
+          *ngIf="personForm.controls.language && personForm.controls.language.invalid && personForm.controls.language.touched
+                || submitted && personForm.controls.language.errors" style="color: red;">
           <p style="font-size: 13px;">Please select an valid Input</p>
         </span>
       </div>
@@ -155,11 +211,17 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="addressType">AddressType</label>
-        <select class="form-control" id="addressType" formControlName="addressType" required>
+        <select
+          class="form-control"
+          id="addressType"
+          formControlName="addressType"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.addressType.errors}" required>
           <option>--select--</option>
           <option *ngFor="let item of lookUpsData?.addressType">{{item.name}}</option>
         </select>
-        <span *ngIf="addressType && addressType.invalid && addressType.touched" style="color: red;">
+        <span
+          *ngIf="personForm.controls.addressType && personForm.controls.addressType.invalid && personForm.controls.addressType.touched
+                ||submitted && personForm.controls.addressType.errors" style="color: red;">
           <p style="font-size: 13px;">Please select an valid Input</p>
         </span>
       </div>
@@ -167,38 +229,65 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="addressline1">Address Line #1</label>
-        <input type="text" class="form-control" id="addressLine1" formControlName="addressLine1" required>
-        <span *ngIf="addressLine1 && addressLine1.invalid && addressLine1.touched" style="color: red;">
-          <p style="font-size: 13px;">Please enter a valid Address Line</p>
+        <input
+          type="text"
+          class="form-control"
+          id="addressLine1"
+          formControlName="addressLine1"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.addressLine1.errors}" required>
+        <span
+          *ngIf="personForm.controls.addressLine1 && personForm.controls.addressLine1.invalid && personForm.controls.addressLine1.touched
+                ||submitted && personForm.controls.addressLine1.errors" style="color: red;">
+          <p style="font-size: 13px;">Please enter a valid Input</p>
         </span>
       </div>
     </div>
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="addressline2">Address Line #2</label>
-        <input type="text" class="form-control" id="addressLine2" formControlName="addressLine2">
-        <span *ngIf="addressLine2 && addressLine2.invalid && addressLine2.touched" style="color: red;">
-          <p style="font-size: 13px;">Please enter a valid Address Line</p>
+        <input
+          type="text"
+          class="form-control"
+          id="addressLine2"
+          formControlName="addressLine2"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.addressLine2.errors}" required>
+        <span
+          *ngIf="personForm.controls.addressLine2 && personForm.controls.addressLine2.invalid && personForm.controls.addressLine2.touched
+                ||submitted && personForm.controls.addressLine2.errors" style="color: red;">
+          <p style="font-size: 13px;">Please enter a valid Input</p>
         </span>
       </div>
     </div>
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="zipCode">Zip Code</label>
-        <input type="number" class="form-control" id="zipCode" formControlName="zipCode" required>
-        <span *ngIf="zipCode && zipCode.invalid && zipCode.touched" style="color: red;">
-          <p style="font-size: 13px;">Please enter a valid Zip Code</p>
+        <input
+          type="number"
+          class="form-control"
+          id="zipCode"
+          formControlName="zipCode"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.zipCode.errors}" required>
+        <span
+          *ngIf="personForm.controls.zipCode && personForm.controls.zipCode.invalid && personForm.controls.zipCode.touched
+                ||submitted && personForm.controls.zipCode.errors" style="color: red;">
+          <p style="font-size: 13px;">Please enter a valid Input</p>
         </span>
       </div>
     </div>
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="phoneType">Phone type</label>
-        <select class="form-control" id="phoneType" formControlName="phoneType" required>
+        <select
+          class="form-control"
+          id="phoneType"
+          formControlName="phoneType"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.phoneType.errors}" required>
           <option>--select--</option>
           <option *ngFor="let item of lookUpsData?.phoneType">{{item.name}}</option>
         </select>
-        <span *ngIf="phoneType && phoneType.invalid && phoneType.touched" style="color: red;">
+        <span
+          *ngIf="personForm.controls.phoneType && personForm.controls.phoneType.invalid && personForm.controls.phoneType.touched
+                ||submitted && personForm.controls.phoneType.errors" style="color: red;">
           <p style="font-size: 13px;">Please select an valid Input</p>
         </span>
       </div>
@@ -206,40 +295,68 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="phone">Phone</label>
-        <input type="tel" id="phone" name="phone" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" class="form-control" formControlName="phone" required>
-        <span *ngIf="phone && phone.invalid && phone.touched" style="color: red;">
-          <p style="font-size: 13px;">Please enter a valid Phone Number</p>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          class="form-control"
+          formControlName="phone"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.phone.errors}" required>
+        <span
+          *ngIf="personForm.controls.phone && personForm.controls.phone.invalid && personForm.controls.phone.touched
+                ||submitted && personForm.controls.phone.errors" style="color: red;">
+          <p style="font-size: 13px;">Please enter a valid Input</p>
         </span>
       </div>
     </div>
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="city">City</label>
-        <input type="text" class="form-control" id="city" formControlName="city">
-        <span *ngIf="city && city.invalid && city.touched" style="color: red;">
-          <p style="font-size: 13px;">Please enter a valid City Name</p>
+        <input
+          type="text"
+          class="form-control"
+          id="city"
+          formControlName="city"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.city.errors}" required>
+        <span
+          *ngIf="personForm.controls.city && personForm.controls.city.invalid && personForm.controls.city.touched
+                ||submitted && personForm.controls.city.errors" style="color: red;">
+          <p style="font-size: 13px;">Please enter a valid Input</p>
         </span>
       </div>
     </div>
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="state">State</label>
-        <input type="text" class="form-control" id="state" formControlName="state">
-        <span *ngIf="state && state.invalid && state.touched" style="color: red;">
-          <p style="font-size: 13px;">Please enter a valid State Name</p>
+        <input
+          type="text"
+          class="form-control"
+          id="state"
+          formControlName="state"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.state.errors}" required>
+        <span
+          *ngIf="personForm.controls.state && personForm.controls.state.invalid && personForm.controls.state.touched
+                ||submitted && personForm.controls.state.errors" style="color: red;">
+          <p style="font-size: 13px;">Please enter a valid Input</p>
         </span>
       </div>
     </div>
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="timeZone">Time Zone</label>
-        <select class="form-control" id="timeZone" formControlName="timeZone" required>
+        <select
+          class="form-control"
+          id="timeZone"
+          formControlName="timeZone"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.timeZone.errors}" required>
           <option>--select--</option>
           <option value="indian">Indian</option>
           <option value="europe">Europe</option>
           <option value="atlantic">Atlantic</option>
         </select>
-        <span *ngIf="timeZone && timeZone.invalid && timeZone.touched" style="color: red;">
+        <span
+          *ngIf="personForm.controls.timeZone && personForm.controls.timeZone.invalid && personForm.controls.timeZone.touched
+                ||submitted && personForm.controls.timeZone.errors" style="color: red;">
           <p style="font-size: 13px;">Please select an valid Input</p>
         </span>
       </div>
@@ -247,36 +364,46 @@
     <div class="col-md-4 col-12">
       <div class="form-group">
         <label id="country">Country</label>
-        <select class="form-control" id="country" formControlName="country" required>
+        <select
+          class="form-control"
+          id="country"
+          formControlName="country"
+          [ngClass]="{'is-invalid':submitted && personForm.controls.country.errors}" required>
           <option>--select--</option>
           <option value="in">India</option>
           <option value="us">United States</option>
           <option value="eu">Europe</option>
           <option value="uk">United Kingdom</option>
         </select>
-        <span *ngIf="country && country.invalid && country.touched" style="color: red;">
+        <span
+          *ngIf="personForm.controls.country && personForm.controls.country.invalid && personForm.controls.country.touched
+                ||submitted && personForm.controls.country.errors" style="color: red;">
           <p style="font-size: 13px;">Please select an valid Input</p>
         </span>
       </div>
     </div>
     <nav class="navbar navbar-expand-sm navbar-dark  navbar-fixed-top">
-      <div><button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button></div>&nbsp;&nbsp;
+      <div><button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button></div>
       <div class="d-flex ms-auto order-5">
-        <div><button type="submit" class="btn btn-success" [disabled]="personForm.invalid">Save</button></div>
+        <div><button type="submit" class="btn btn-success">Save</button></div>
       </div>
     </nav>
   </form>
 </div>
-<nav class="navbar navbar-expand-sm navbar-dark  navbar-fixed-bottom">
+<nav class="navbar navbar-expand-sm navbar-dark  navbar-fixed-bottom" id="bottomNavbar">
   <button type="button" class="btn btn-primary" (click)="onClicked()">{{editForm?'update user':'CreatePerson'}}</button>
   <button type="button" class="btn btn-secondary">Edit</button>
   <div class="d-flex ms-auto order-5">
-    <label>*select number of rows to display</label>
-    <select id=""  required>
-      <option>--select--</option>
-      <option *ngFor="let item of lookUpsData?.phoneType">{{item.name}}</option>
-    </select>
-    <button class="btn btn-light" type="button" [disabled]="lowerBound<=19" (click)="onPrevieous()">Previeous</button>
+    <form [formGroup]="form">
+      <label>Select fields count:</label>
+      <select formControlName="displayLimiter">
+        <option *ngFor="let item of displayLimit" [ngValue]="item">
+          {{ item }}
+        </option>
+      </select>
+    <button class="btn btn-light" type="button" [disabled]="lowerBound<=selectedValue" (click)="onPrevieous()">Previeous</button>
     <button class="btn btn-dark" type="button" (click)="onNext()">Next</button>
+  </form>
   </div>
 </nav>
+

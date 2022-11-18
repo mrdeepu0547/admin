@@ -9,9 +9,9 @@ import { PsServiceService } from '../ps-service.service';
   styleUrls: ['./ps-home.component.css']
 })
 export class PsHomeComponent implements OnInit {
-
+  public selectedValue=0;
+  public submitted = false;
   public lowerBound:number=0;
-  public upperBound:number=20;
   lookUpsData:any=[];
   public psList = [];
   show:boolean=false;
@@ -20,6 +20,11 @@ export class PsHomeComponent implements OnInit {
   editForm=false;
   editFormId=0;
   editData:any=[];
+  public displayLimit=[5,10,15,20];
+    form = new FormGroup({
+      displayLimiter: new FormControl(0),
+    });
+  public  upperBound=this.form.get('displayLimiter')?.value;
   personForm = new FormGroup({
     psId:new FormControl(0),
     lastName: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -42,7 +47,7 @@ export class PsHomeComponent implements OnInit {
     timeZone: new FormControl('', [Validators.required]),
     country: new FormControl('', [Validators.required]),
   })
-public data={
+  public data={
   "psId": 0,
   "saluationId":'Mr',
   "genderId": "U",
@@ -68,18 +73,8 @@ public data={
   "mappedOfficeIds": "140",
   "updatedUserId": 1, //hard code,
   // "isEdit":false
-}
-  constructor(private psService:PsServiceService,private http:HttpClient,private route:RouterModule) { }
-  ngOnInit() {
-
-    this. getAllLookupsData();
   }
-  onCancel(){
-    this.personForm.reset();
-    this.show=false;
-  }
-  getAllPersons() {
-    let jsonObj={"userId":1,
+private jsonObj={"userId":1,
     "lowerBound":this.lowerBound,
     "upperBound":this.upperBound,
     "psId":0,
@@ -105,7 +100,16 @@ public data={
     "accountNumber":"",
     "dischargeStartDate":"",
     "dischargeEndDate":""};
-    this.psService.getPersons(JSON.stringify(jsonObj)).subscribe(result => {
+  constructor(private psService:PsServiceService,private http:HttpClient,private route:RouterModule) { }
+  ngOnInit() {
+    this. getAllLookupsData();
+  }
+  onCancel(){
+    this.personForm.reset();
+    this.show=false;
+  }
+  getAllPersons() {
+    this.psService.getPersons(JSON.stringify(this.jsonObj)).subscribe(result => {
       this.psList = result.psList;
       console.log(result);
     })
@@ -133,13 +137,13 @@ public data={
     })
   }
   onPrevieous(){
-    this.lowerBound=this.lowerBound-20;
-    this.upperBound=this.upperBound-20;
+    this.lowerBound=this.lowerBound-this.upperBound;
+    this.upperBound=this.upperBound-this.lowerBound;
     this.getAllPersons();
   }
   onNext(){
-    this.lowerBound=this.lowerBound+20;
-    this.upperBound=this.upperBound+20;
+    this.lowerBound=this.lowerBound+this.upperBound;
+    this.upperBound=this.upperBound+this.lowerBound;
     this.getAllPersons();
   }
   onEdit(data){
@@ -147,35 +151,33 @@ public data={
     console.log(data.PSId);
     console.log(this.personForm);
     this.editForm=true;
-    this.http.get('http://poc.aquilasoftware.com/poclite/psapi/getPSDetails?jsonObj=%7B%22psId%22:'+this.editFormId+'%7D').subscribe(
-      result =>{
-        this.editData = result;
-        console.log(result);
-    })
+    const firstName = data.PSName.slice(data.PSName.indexOf(',') + 1);
+    console.log(firstName);
+    const lastName = data.PSName.slice(0, data.PSName.indexOf(','));
+    console.log(lastName );
     this.personForm.setValue({
-
-      firstName:this.editData.firstName,
-      psId: data.PSId,
-      gender:this.editData.gender,
-      salutation:this.editData.salutation,
-      maritialStatus:this.editData.maritialStatus,
-      dateOfBirth:this.editData.dob,
-      race:this.editData.race,
-      ssn:this.editData.ssn,
-      language:this.editData.language,
-      addressType:this.editData.addressType,
-      addressLine1:this.editData.addressLine1,
-      addressLine2: '',
-      zipCode:this.editData.zipCode,
-      phoneType:this.editData.phoneType,
-      phone:data.phone,
-      city:data.city,
-      state:data.state,
-      timeZone: '',
-      country:this.editData.country
+    psId:data.PSId,
+    lastName: lastName,
+    firstName: firstName,
+    gender: '',
+    salutation: '',
+    maritialStatus:'',
+    dateOfBirth: '',
+    race: '',
+    ssn: '',
+    language: '',
+    addressType: '',
+    addressLine1: '',
+    addressLine2: '',
+    zipCode:data.zipCode ,
+    phoneType:'',
+    phone: '',
+    city: data.city,
+    state:data.state,
+    timeZone: '',
+    country: '',
     })
   }
-
   onClickedMe(){
     this.viewtable=true;
     this.getAllPersons();
@@ -193,6 +195,11 @@ public data={
       this.http.delete('http://poc.aquilasoftware.com/poclite.json').subscribe();
      }
     onSubmit() {
+      this.submitted = true;
+       if(this.personForm.invalid){
+         return
+        }
+        alert("Sucess !!");
       if(this.personForm.valid){
         if(this.editForm==true){
           console.log(this.data)
@@ -208,83 +215,7 @@ public data={
     }
     }
     // form getters
-    get lastName(){
-      return this.personForm.get('lastName');
-     }
-
-     get firstName(){
-      return this.personForm.get('firstName');
-     }
-
-     get gender(){
-      return this.personForm.get('gender');
-     }
-
-     get salutation(){
-      return this.personForm.get('salutation');
-     }
-
-     get maritialStatus(){
-      return this.personForm.get('maritialStatus');
-     }
-
-     get dateOfBirth(){
-      return this.personForm.get('dateOfBirth');
-     }
-
-     get race(){
-      return this.personForm.get('race');
-     }
-
-     get ssn(){
-      return this.personForm.get('ssn');
-     }
-
-     get language(){
-      return this.personForm.get('language');
-     }
-
-     get addressType(){
-      return this.personForm.get('addressType');
-     }
-
-     get addressLine1(){
-      return this.personForm.get('addressLine1');
-     }
-
-     get addressLine2(){
-      return this.personForm.get('addressLine2');
-     }
-
-     get zipCode(){
-      return this.personForm.get('zipCode');
-     }
-
-     get phoneType(){
-      return this.personForm.get('phoneType');
-     }
-
-     get phone(){
-      return this.personForm.get('phone');
-     }
-
-     get city(){
-      return this.personForm.get('city');
-     }
-
-     get state(){
-      return this.personForm.get('state');
-     }
-
-     get timeZone(){
-      return this.personForm.get('timeZone');
-     }
-
-     get country(){
-      return this.personForm.get('country');
-     }
-
-     public dummyParam(number,string){
-
-     }
+    get getControl(){                            //remove all get***() and just add this
+      return this.personForm.controls;
+    }
 }
